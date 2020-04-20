@@ -6,6 +6,7 @@ let dbConfig = require('./database/db');
 
 // Express Route
 const userRoute = require('../backend/routes/user.route')
+const projectRoute = require('../backend/routes/project.route')
 
 // Connecting mongoDB Database
 mongoose.Promise = global.Promise;
@@ -28,6 +29,7 @@ app.use(bodyParser.urlencoded({
 }));
 app.use(cors());
 app.use('/users', userRoute)
+app.use('/projects',projectRoute)
 
 
 // PORT

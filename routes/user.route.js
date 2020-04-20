@@ -3,7 +3,9 @@ let mongoose = require('mongoose'),
   router = express.Router();
 
 // User Model
-let userSchema = require('../models/User');
+let userSchema = require('../models/User')
+
+
 
 // CREATE User
 router.route('/create-user').post((req, res, next) => {

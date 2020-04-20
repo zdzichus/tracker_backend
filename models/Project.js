@@ -22,6 +22,6 @@ let projectSchema = new Schema({
 })
 
 
-module.exports = mongoose.model('User', projectSchema)
+module.exports = mongoose.model('Project', projectSchema)
 
 
