@@ -4,24 +4,24 @@ const Schema = mongoose.Schema;
 
 let timesheetSchema = new Schema({
 
-                    timeshet_day: {
+                    timesheet_vacation: {
                     type: String
                     },
                     
                     project_name: {
                     type: String
                     },
-                    vacation: {
+                    timesheet_sick_day: {
                       type: String
                     },
-                    working_day: {
+                    timesheet_project_work: {
                       type: String
                     },
-                    sick_day: {
+                    timesheet_date: {
                       type: String
                     },
 
-
+ 
                   }, {
 
   collection: 'timesheets'
