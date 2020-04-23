@@ -7,6 +7,10 @@ let timesheetSchema = new Schema({
                     timeshet_day: {
                     type: String
                     },
+                    
+                    project_name: {
+                    type: String
+                    },
                     vacation: {
                       type: String
                     },
