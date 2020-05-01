@@ -5,6 +5,7 @@ let bodyParser = require('body-parser');
 let dbConfig = require('./database/db');
 
 // Express Route
+const users = require('../backend/routes/auth.route');
 const userRoute = require('../backend/routes/user.route')
 const projectRoute = require('../backend/routes/project.route')
 const timesheetRoute = require('../backend/routes/timesheet.route')
@@ -13,7 +14,7 @@ const timesheetRoute = require('../backend/routes/timesheet.route')
 mongoose.Promise = global.Promise;
 mongoose.connect(dbConfig.db, {
 
-  useNewUrlParser: true,
+    useNewUrlParser: true,
     useUnifiedTopology: true
 }).then(() => {
       console.log('Database sucessfully connected!')
@@ -22,18 +23,28 @@ mongoose.connect(dbConfig.db, {
       console.log('Could not connect to database : ' + error)
     }
 )
+// Remvoe MongoDB warning error
+mongoose.set('useCreateIndex', true);
 
+
+
+// Express settings
 const app = express();
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({
-  extended: true
+  extended: false
 }));
+
 app.use(cors());
+
 app.use('/users', userRoute)
 app.use('/projects',projectRoute)
 app.use('/timesheets',timesheetRoute)
 
+// Serve static resources
+app.use('/public', express.static('public'));
 
+app.use('/users', users)
 
 // PORT
 const port = process.env.PORT || 4000;
@@ -45,6 +56,7 @@ const server = app.listen(port, () => {
 app.use((req, res, next) => {
   next(createError(404));
 });
+
 
 app.use(function (err, req, res, next) {
   console.error(err.message);
