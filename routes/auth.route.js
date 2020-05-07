@@ -7,7 +7,6 @@ const userSchema = require("../models/User");
 const authorize = require("../middlewares/auth");
 const { check, validationResult } = require('express-validator');
 
-
 // Sign-up
 router.post("/register-user",
     [
@@ -23,6 +22,7 @@ router.post("/register-user",
             .not()
             .isEmpty()
             .isLength({ min: 5, max: 8 })
+
     ],
     (req, res, next) => {
         const errors = validationResult(req);
@@ -41,7 +41,9 @@ router.post("/register-user",
                 user.save().then((response) => {
                     res.status(201).json({
                         message: "User successfully created!",
-                        result: response
+                        result: response,
+                        status: "created"
+
                     });
                 }).catch(error => {
                     res.status(500).json({
@@ -81,6 +83,8 @@ router.post("/signin", (req, res, next) => {
         res.status(200).json({
             token: jwtToken,
             expiresIn: 3600,
+            status: "created",
+            logged_in: true,
             msg: getUser
         });
     }).catch(err => {
@@ -101,6 +105,25 @@ router.route('/').get(authorize, (req, res) => {
     })
 })
 
+
+// Set a Current Logged User 
+router.route('/logged_in/:id').get((req, res, next) => {
+    userSchema.findById(req.params.id, (error, data) => {
+        if (error) {
+            return next(error);
+        } else {
+            res.status(200).json({
+                msg: data,
+                status: "created",
+                logged_in: true
+
+            })
+        }
+    })
+})
+
+
+
 // Get Single User
 router.route('/user-profile/:id').get((req, res, next) => {
     userSchema.findById(req.params.id, (error, data) => {
@@ -108,7 +131,10 @@ router.route('/user-profile/:id').get((req, res, next) => {
             return next(error);
         } else {
             res.status(200).json({
-                msg: data
+                msg: data,
+                status: "created",
+                logged_in: true
+
             })
         }
     })

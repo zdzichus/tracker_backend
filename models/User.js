@@ -24,7 +24,7 @@ let userSchema = new Schema({
   user_role: {
     type: String
   },
-  user_app_role: {
+  user_com_role: {
     type: String
   }
 

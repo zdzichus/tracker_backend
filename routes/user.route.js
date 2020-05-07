@@ -1,23 +1,65 @@
 let mongoose = require('mongoose'),
-  express = require('express'),
-  router = express.Router();
+express = require('express'),
+router = express.Router();
+const { check, validationResult } = require('express-validator');
+const bcrypt = require("bcryptjs");
 
 // User Model
 let userSchema = require('../models/User')
 
 
 
-// CREATE User
-router.route('/create-user').post((req, res, next) => {
-  userSchema.create(req.body, (error, data) => {
-    if (error) {
-      return next(error)
-    } else {
-      console.log(data)
-      res.json(data)
-    }
-  })
-});
+
+// Create User
+router.post("/create-user",
+    [
+        check('user_name')
+            .not()
+            .isEmpty()
+            .isLength({ min: 3 })
+            .withMessage('Name must be atleast 3 characters long'),
+        check('email', 'Email is required')
+            .not()
+            .isEmpty(),
+        check('user_password', 'Password should be between 5 to 8 characters long')
+            .not()
+            .isEmpty()
+            .isLength({ min: 5, max: 8 })
+      
+    ],
+    (req, res, next) => {
+        const errors = validationResult(req);
+        console.log(req.body);
+
+        if (!errors.isEmpty()) {
+            return res.status(422).jsonp(errors.array());
+        }
+        else {
+            bcrypt.hash(req.body.user_password, 10).then((hash) => {
+                const user = new userSchema({
+                    user_name: req.body.user_name,
+                    email: req.body.email,
+                    user_password: hash,
+                    user_surname: req.body.user_surname,
+                    user_com_role: req.body.user_com_role,
+                    user_role: req.body.user_role
+                });
+                user.save().then((response) => {
+                    res.status(201).json({
+                        message: "User successfully created!",
+                        result: response,
+                        status: "created"
+
+                    });
+                }).catch(error => {
+                    res.status(500).json({
+                        error: error
+                    });
+                });
+            });
+        }
+    });
+
 
 // READ Users
 router.route('/').get((req, res) => {
