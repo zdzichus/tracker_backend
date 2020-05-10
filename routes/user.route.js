@@ -3,12 +3,10 @@ express = require('express'),
 router = express.Router();
 const { check, validationResult } = require('express-validator');
 const bcrypt = require("bcryptjs");
+const authorize = require("../routes/auth");
 
 // User Model
 let userSchema = require('../models/User')
-
-
-
 
 // Create User
 router.post("/create-user",
@@ -62,15 +60,16 @@ router.post("/create-user",
 
 
 // READ Users
-router.route('/').get((req, res) => {
+router.route("/").get(authorize, (req, res) => {
+  // console.log(">>>");
   userSchema.find((error, data) => {
     if (error) {
-      return next(error)
+      return next(error);
     } else {
-      res.json(data)
+      res.json(data);
     }
-  })
-})
+  });
+});
 
 // Get Single User
 router.route('/edit-user/:id').get((req, res) => {
