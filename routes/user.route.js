@@ -5,6 +5,7 @@ const { check, validationResult } = require('express-validator');
 const bcrypt = require("bcryptjs");
 const authorize = require("../routes/auth");
 
+
 // User Model
 let userSchema = require('../models/User')
 
