@@ -1,10 +1,14 @@
 let mongoose = require('mongoose'),
   express = require('express'),
   router = express.Router();
+const { check, validationResult } = require('express-validator');
+const bcrypt = require("bcryptjs");
+const authorize = require("../routes/auth");
 
 // Timesheet Model
 
 let timesheetSchema = require('../models/Timesheet')
+
 
 
 // CREATE Timesheet
@@ -20,16 +24,19 @@ router.route('/create-timesheet').post((req, res, next) => {
 });
 
 
-// READ TimeSheet
-router.route('/').get((req, res) => {
+
+// READ TimeSheets
+router.route("/").get(authorize, (req, res) => {
+  // console.log(">>>");
   timesheetSchema.find((error, data) => {
     if (error) {
-      return next(error)
+      return next(error);
     } else {
-      res.json(data)
+      res.json(data);
     }
-  })
-})
+  });
+});
+
 
 // Get Single TimeSheet
 router.route('/edit-timesheet/:id').get((req, res) => {

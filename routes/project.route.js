@@ -1,6 +1,9 @@
 let mongoose = require('mongoose'),
   express = require('express'),
   router = express.Router();
+const { check, validationResult } = require('express-validator');
+const bcrypt = require("bcryptjs");
+const authorize = require("../routes/auth");
 
 // Projecct Model
 
@@ -20,16 +23,18 @@ router.route('/create-project').post((req, res, next) => {
 });
 
 
-// READ Projects
-router.route('/').get((req, res) => {
+// READ projects
+router.route("/").get(authorize, (req, res) => {
+  // console.log(">>>");
   projectSchema.find((error, data) => {
     if (error) {
-      return next(error)
+      return next(error);
     } else {
-      res.json(data)
+      res.json(data);
     }
-  })
-})
+  });
+});
+
 
 // Get Single Project
 router.route('/edit-project/:id').get((req, res) => {
@@ -41,7 +46,6 @@ router.route('/edit-project/:id').get((req, res) => {
     }
   })
 })
-
 
 // Update Project
 router.route('/update-project/:id').put((req, res, next) => {

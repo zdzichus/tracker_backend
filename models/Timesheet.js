@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
-
+const uniqueValidator = require('mongoose-unique-validator');
 
 let timesheetSchema = new Schema({
 
@@ -27,6 +27,6 @@ let timesheetSchema = new Schema({
   collection: 'timesheets'
 })
 
-
+timesheetSchema.plugin(uniqueValidator, { message: 'timesheet already in use.' });
 module.exports = mongoose.model('Timesheet', timesheetSchema)
 

@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
+const uniqueValidator = require('mongoose-unique-validator');
 
 let projectSchema = new Schema({
 
@@ -21,7 +22,7 @@ let projectSchema = new Schema({
   collection: 'projects'
 })
 
-
+projectSchema.plugin(uniqueValidator, { message: 'Project already in use.' });
 module.exports = mongoose.model('Project', projectSchema)
 
 
